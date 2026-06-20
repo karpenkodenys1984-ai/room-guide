@@ -1,0 +1,2 @@
+{"time":"2026-06-20T13:30:42.2994753-07:00","level":"INFO","msg":"App started"}
+{"time":"2026-06-20T13:30:43.443273-07:00","level":"ERROR","msg":"failed to load map background","source":"frontend","component":"MapEditor","client_time":"2026-06-20T20:30:43.423Z","error":"failed to query nodes: SQL logic error: no such table: nodes (1)"}
