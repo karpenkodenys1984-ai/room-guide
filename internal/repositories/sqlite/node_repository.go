@@ -82,3 +82,30 @@ func (r *NodeRepository) FindAll() ([]*models.NodeRecord, error) {
 
 	return nodes, nil
 }
+
+func (r *NodeRepository) UpdateNode(nodeId int64, label string, x int, y int) error {
+	now := time.Now()
+
+	result, err := r.db.Exec(
+		`UPDATE nodes SET label = ?, x = ?, y = ?, updated_timestamp = ? WHERE node_id = ?`,
+		label,
+		x,
+		y,
+		now,
+		nodeId,
+	)
+	if err != nil {
+		return fmt.Errorf("failed to update node: %w", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("failed to get rows affected: %w", err)
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("node with id %d not found", nodeId)
+	}
+
+	return nil
+}
