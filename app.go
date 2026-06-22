@@ -60,10 +60,14 @@ func (a *App) GetMapBackground() (string, error) {
 	return a.mapService.GetMapBackround()
 }
 
-func (a *App) SaveNode(label string, x int16, y int16) error {
+func (a *App) SaveNode(label string, x float32, y float32) error {
 	return a.mapService.SaveNode(label, x, y)
 }
 
 func (a *App) GetAllNodes() ([]dto.Node, error) {
 	return a.mapService.GetAllNodes()
+}
+
+func (a *App) UpdateNode(nodeId int64, label string, x float32, y float32) error {
+	return a.mapService.UpdateNode(nodeId, label, x, y)
 }

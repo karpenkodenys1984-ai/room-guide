@@ -3,7 +3,7 @@ import { SubTab, SubTabAction } from '../types/MapEditor/Tab';
 import FlowCanvas from './FlowCanvas.vue';
 import Tabs from './Map/Tabs.vue';
 import { onMounted, ref, provide } from 'vue';
-import { GetMapBackground, SaveMapBackground, SaveNode, GetAllNodes } from '../../wailsjs/go/main/App';
+import { GetMapBackground, SaveMapBackground, SaveNode, GetAllNodes, UpdateNode } from '../../wailsjs/go/main/App';
 import { useLogger } from '../composables/useLogger';
 import { XYPosition } from '@vue-flow/core';
 import { useGraph } from '../composables/useGraph'
@@ -131,8 +131,8 @@ async function createNode() {
     addNode(10, 10, "New Node")
 }
 
-function onNodeDragStop(node: VueFlowNode) {
-  console.log("NODE - %w",node);
+async function onNodeDragStop(node: VueFlowNode) {
+  await UpdateNode(Number(node.id), node.data.label, node.position.x, node.position.y)
 }
 
 async function FillNodes() {

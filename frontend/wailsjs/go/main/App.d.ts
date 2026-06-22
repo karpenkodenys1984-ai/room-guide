@@ -11,3 +11,5 @@ export function Greet(arg1:string):Promise<string>;
 export function SaveMapBackground(arg1:string,arg2:string):Promise<string>;
 
 export function SaveNode(arg1:string,arg2:number,arg3:number):Promise<void>;
+
+export function UpdateNode(arg1:number,arg2:string,arg3:number,arg4:number):Promise<void>;

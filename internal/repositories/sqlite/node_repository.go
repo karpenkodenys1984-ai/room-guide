@@ -17,7 +17,7 @@ func NewNodeRepository(db *sql.DB) *NodeRepository {
 	return &NodeRepository{db: db}
 }
 
-func (r *NodeRepository) Save(label string, x int16, y int16) (*models.NodeRecord, error) {
+func (r *NodeRepository) Save(label string, x float32, y float32) (*models.NodeRecord, error) {
 	now := time.Now()
 
 	result, err := r.db.Exec(
@@ -83,7 +83,7 @@ func (r *NodeRepository) FindAll() ([]*models.NodeRecord, error) {
 	return nodes, nil
 }
 
-func (r *NodeRepository) UpdateNode(nodeId int64, label string, x int, y int) error {
+func (r *NodeRepository) UpdateNode(nodeId int64, label string, x float32, y float32) error {
 	now := time.Now()
 
 	result, err := r.db.Exec(

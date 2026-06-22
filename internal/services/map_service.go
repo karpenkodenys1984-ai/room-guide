@@ -103,7 +103,7 @@ func (s *MapService) GetMapBackround() (string, error) {
 
 }
 
-func (s *MapService) SaveNode(label string, x int16, y int16) error {
+func (s *MapService) SaveNode(label string, x float32, y float32) error {
 	_, err := s.nodeRepo.Save(label, x, y)
 
 	if err != nil {
@@ -114,17 +114,21 @@ func (s *MapService) SaveNode(label string, x int16, y int16) error {
 }
 
 func (s *MapService) GetAllNodes() ([]dto.Node, error) {
-	 records, err := s.nodeRepo.FindAll()
-    if err != nil {
-        return nil, err
-    }
+	records, err := s.nodeRepo.FindAll()
+	if err != nil {
+		return nil, err
+	}
 
-    nodes := make([]dto.Node, len(records))
-    for i, record := range records {
-        nodes[i] = convertNodeRecordToDto(record)
-    }
+	nodes := make([]dto.Node, len(records))
+	for i, record := range records {
+		nodes[i] = convertNodeRecordToDto(record)
+	}
 
-    return nodes, nil
+	return nodes, nil
+}
+
+func (s *MapService) UpdateNode(nodeId int64, label string, x float32, y float32) error {
+	return s.nodeRepo.UpdateNode(nodeId, label, x, y)
 }
 
 func parseBase64Image(base64Data string) (mimeType, rawData string, err error) {
@@ -151,16 +155,16 @@ func parseBase64Image(base64Data string) (mimeType, rawData string, err error) {
 }
 
 func convertNodeRecordToDto(record *models.NodeRecord) dto.Node {
-    return dto.Node{
-        Id:       int16(record.NodeId),
-        Type:     string(dto.RoomTypeRoom),
-        Position: dto.Position{
-            X: int(record.X),
-            Y: int(record.Y),
-        },
-        Data: dto.RoomData{
-            Label: record.Label,
-            Type:  dto.RoomTypeRoom,
-        },
-    }
+	return dto.Node{
+		Id:   int16(record.NodeId),
+		Type: string(dto.RoomTypeRoom),
+		Position: dto.Position{
+			X: int(record.X),
+			Y: int(record.Y),
+		},
+		Data: dto.RoomData{
+			Label: record.Label,
+			Type:  dto.RoomTypeRoom,
+		},
+	}
 }

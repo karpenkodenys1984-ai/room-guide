@@ -21,3 +21,7 @@ export function SaveMapBackground(arg1, arg2) {
 export function SaveNode(arg1, arg2, arg3) {
   return window['go']['main']['App']['SaveNode'](arg1, arg2, arg3);
 }
+
+export function UpdateNode(arg1, arg2, arg3, arg4) {
+  return window['go']['main']['App']['UpdateNode'](arg1, arg2, arg3, arg4);
+}
