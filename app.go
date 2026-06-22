@@ -60,7 +60,7 @@ func (a *App) GetMapBackground() (string, error) {
 	return a.mapService.GetMapBackround()
 }
 
-func (a *App) SaveNode(label string, x float32, y float32) error {
+func (a *App) SaveNode(label string, x float32, y float32) (int64, error) {
 	return a.mapService.SaveNode(label, x, y)
 }
 

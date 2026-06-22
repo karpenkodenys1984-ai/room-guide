@@ -103,14 +103,14 @@ func (s *MapService) GetMapBackround() (string, error) {
 
 }
 
-func (s *MapService) SaveNode(label string, x float32, y float32) error {
-	_, err := s.nodeRepo.Save(label, x, y)
+func (s *MapService) SaveNode(label string, x float32, y float32) (int64, error) {
+	node, err := s.nodeRepo.Save(label, x, y)
 
 	if err != nil {
-		return err
+		return node.NodeId, err
 	}
 
-	return nil
+	return 0, nil
 }
 
 func (s *MapService) GetAllNodes() ([]dto.Node, error) {
