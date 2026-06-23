@@ -107,10 +107,10 @@ func (s *MapService) SaveNode(label string, x float32, y float32) (int64, error)
 	node, err := s.nodeRepo.Save(label, x, y)
 
 	if err != nil {
-		return node.NodeId, err
+		return 0, err
 	}
 
-	return 0, nil
+	return node.NodeId, nil
 }
 
 func (s *MapService) GetAllNodes() ([]dto.Node, error) {

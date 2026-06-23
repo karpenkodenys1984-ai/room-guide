@@ -128,6 +128,9 @@ async function createNode() {
 
     }
 
+    const x = 10
+    const y = 10
+    
     addNode(10, 10, "New Node")
 }
 
@@ -173,9 +176,16 @@ onMounted(async () => {
   }
 })
 
-provide('saveNode', async (label: string, x: number,y: number) => {
+provide('saveNode', async (label: string, x: number,y: number, vueFlowId: string) => {
   try {
-    await SaveNode(label, x, y)
+   const nodeId = await SaveNode(label, x, y)
+   const idx = nodes.value.findIndex(n => n.id === vueFlowId)
+
+    if (idx !== -1) {
+      nodes.value[idx] = { ...nodes.value[idx], id: String(nodeId) }
+    }
+
+    return nodeId
   } catch (e) {
     logger.error('failed to save node', { error: String(e) })
   }
