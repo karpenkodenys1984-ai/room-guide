@@ -7,16 +7,6 @@ export function useGraph() {
  
   const edges = ref<FlowEdge[]>([])
 
-  function addNode(x: number, y: number, label = 'Новый узел') {
-    const id = crypto.randomUUID()
-    nodes.value.push({
-      id,
-      type: 'room',
-      position: { x, y },
-      data: { label, type: 'room' },
-    })
-  }
-
   function onConnect(connection: Connection) {
     edges.value.push({
       id: `${connection.source}-${connection.target}`,
@@ -35,5 +25,5 @@ export function useGraph() {
     edges.value = data.edges
   }
 
-  return { nodes, edges, addNode, onConnect, serialize, load }
+  return { nodes, edges, onConnect, serialize, load }
 }

@@ -11,7 +11,7 @@ const editing = ref(false)
 
 const inputRef = ref<HTMLInputElement | null>(null)
 
-const saveNode = inject<(label: string, x: number, y: number) => Promise<void>>('saveNode')
+const updateNodeLabel = inject<(id: string, label: string, x: number, y: number) => Promise<void>>('updateNodeLabel')
 
 function startEdit() {
   editing.value = true
@@ -22,13 +22,11 @@ function startEdit() {
 }
 
 function stopEdit(e: Event) {
-  const value  = (e.target as HTMLInputElement).value.trim()
-
+  const value = (e.target as HTMLInputElement).value.trim()
   if (value) {
     updateNodeData(props.id, { label: value })
-    saveNode?.(value, props.position.x, props.position.y)
+    updateNodeLabel?.(props.id, value, props.position.x, props.position.y)
   }
-
   editing.value = false
 }
 

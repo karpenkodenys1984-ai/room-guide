@@ -11,7 +11,7 @@ import type { Node as VueFlowNode } from '@vue-flow/core'
 import { FlowNode, RoomData } from '../types/graph.js'
 
 
-const { nodes, edges, addNode, onConnect } = useGraph()
+const { nodes, edges, onConnect } = useGraph()
 
 const logger = useLogger()
 
@@ -116,22 +116,21 @@ async function onFileSelected(event: Event) {
 }
 
 async function createNode() {
-    const nodeId = nodes.value.length.toString()
-
-    const node  = {
-        id: nodeId,
-        type: 'room',
-        position: {
-            x: 10, y: 10
-        },
-        label: "New Label"
-
-    }
-
+    try {
     const x = 10
     const y = 10
+    const label = 'New Node'
+    const nodeId = await SaveNode(label, x, y)
     
-    addNode(10, 10, "New Node")
+    nodes.value.push({
+      id: String(nodeId),
+      type: 'room',
+      position: { x, y },
+      data: { label, type: 'room' },
+    } satisfies FlowNode)
+  } catch (e) {
+    logger.error('failed to create node', { error: String(e) })
+  }
 }
 
 async function onNodeDragStop(node: VueFlowNode) {
@@ -176,18 +175,11 @@ onMounted(async () => {
   }
 })
 
-provide('saveNode', async (label: string, x: number,y: number, vueFlowId: string) => {
+provide('updateNodeLabel', async (id: string, label: string, x: number, y: number) => {
   try {
-   const nodeId = await SaveNode(label, x, y)
-   const idx = nodes.value.findIndex(n => n.id === vueFlowId)
-
-    if (idx !== -1) {
-      nodes.value[idx] = { ...nodes.value[idx], id: String(nodeId) }
-    }
-
-    return nodeId
+    await UpdateNode(Number(id), label, x, y)
   } catch (e) {
-    logger.error('failed to save node', { error: String(e) })
+    logger.error('failed to update node', { error: String(e) })
   }
 })
 
