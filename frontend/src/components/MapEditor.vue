@@ -2,7 +2,8 @@
 import { SubTab, SubTabAction } from '../types/MapEditor/Tab';
 import FlowCanvas from './FlowCanvas.vue';
 import Tabs from './Map/Tabs.vue';
-import { onMounted, ref, provide } from 'vue';
+import NodeDeletePanel from './Map/NodeDeletePanel.vue';
+import { onMounted, ref, provide, computed } from 'vue';
 import { GetMapBackground, SaveMapBackground, SaveNode, GetAllNodes, UpdateNode } from '../../wailsjs/go/main/App';
 import { useLogger } from '../composables/useLogger';
 import { XYPosition } from '@vue-flow/core';
@@ -39,6 +40,7 @@ const tabs  = [
             {
                 name: "Delete",
                 icon: null,
+                action: SubTabAction.NodeDelete
             }
         ]
     },
@@ -63,7 +65,7 @@ const loading = ref(false);
 const actionHandlers: Record<SubTabAction, () => void> = {
     [SubTabAction.Upload]:      () => fileInput.value?.click(),
     [SubTabAction.NodeCreate]:  () => createNode(),
-    [SubTabAction.NodeDelete]:  () => console.log('delete node'),
+    [SubTabAction.NodeDelete]:  () => handleDeleteNode(),
     [SubTabAction.RouteCreate]: () => console.log('create route'),
     [SubTabAction.RouteDelete]: () => console.log('delete route'),
 }
@@ -72,6 +74,20 @@ const fileInput = ref<HTMLInputElement | null>(null)
 
 const backgroundImage = ref<string|null>(null)
 
+const showDeletePanel = ref(false)
+const selectedNodeId = ref<string | null>(null)
+
+const deletableNodes = computed(() =>
+  nodes.value.filter(n => n.type !== 'background')
+)
+
+function handleDeleteNode() {
+  showDeletePanel.value = true
+}
+
+function deleteSelectedNode(nodeId: string) {
+  console.log("NODE - %d", nodeId)
+}
 
 
 function subTabChangeHandler (subtab: SubTab) {
@@ -188,6 +204,12 @@ provide('updateNodeLabel', async (id: string, label: string, x: number, y: numbe
     <div class="map-editor">
         <h1>Map Editor</h1>
          <Tabs :tabs="tabs" @sub-tab-change="subTabChangeHandler"/>
+         <NodeDeletePanel
+          v-if="showDeletePanel"
+          v-model:selected-node-id="selectedNodeId"
+          :nodes="deletableNodes"
+          @delete="deleteSelectedNode"
+    />
           <div class="canvas-container">
             <FlowCanvas 
             :background-image="backgroundImage"
