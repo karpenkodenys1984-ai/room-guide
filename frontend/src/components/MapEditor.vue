@@ -89,7 +89,7 @@ async function deleteSelectedNode(nodeId: string) {
   try {
     await DeleteNode(Number(nodeId))
     nodes.value = nodes.value.filter(n => n.id !== nodeId)
-  } catch {
+  } catch(e) {
      logger.error('failed to delete node', { error: String(e) })
   }
 }
