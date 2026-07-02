@@ -4,7 +4,7 @@ import FlowCanvas from './FlowCanvas.vue';
 import Tabs from './Map/Tabs.vue';
 import NodeDeletePanel from './Map/NodeDeletePanel.vue';
 import { onMounted, ref, provide, computed } from 'vue';
-import { GetMapBackground, SaveMapBackground, SaveNode, GetAllNodes, UpdateNode } from '../../wailsjs/go/main/App';
+import { GetMapBackground, SaveMapBackground, SaveNode, GetAllNodes, UpdateNode, DeleteNode } from '../../wailsjs/go/main/App';
 import { useLogger } from '../composables/useLogger';
 import { XYPosition } from '@vue-flow/core';
 import { useGraph } from '../composables/useGraph'
@@ -85,8 +85,13 @@ function handleDeleteNode() {
   showDeletePanel.value = true
 }
 
-function deleteSelectedNode(nodeId: string) {
-  console.log("NODE - %d", nodeId)
+async function deleteSelectedNode(nodeId: string) {
+  try {
+    await DeleteNode(Number(nodeId))
+    nodes.value = nodes.value.filter(n => n.id !== nodeId)
+  } catch {
+     logger.error('failed to delete node', { error: String(e) })
+  }
 }
 
 

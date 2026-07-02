@@ -109,3 +109,24 @@ func (r *NodeRepository) UpdateNode(nodeId int64, label string, x float32, y flo
 
 	return nil
 }
+
+func (r *NodeRepository) DeleteNode(nodeId int64) error {
+	result, err := r.db.Exec(
+		`DELETE FROM nodes WHERE node_id = ?`,
+		nodeId,
+	)
+	if err != nil {
+		return fmt.Errorf("failed to delete node: %w", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("failed to get rows affected: %w", err)
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("node with id %d not found", nodeId)
+	}
+
+	return nil
+}

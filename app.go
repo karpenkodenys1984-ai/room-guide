@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"log/slog"
 	"room-guide/internal/dto"
 	"room-guide/internal/services"
@@ -37,11 +36,6 @@ func (a *App) startup(ctx context.Context) {
 	a.log.Info("App started")
 }
 
-// Greet returns a greeting for the given name
-func (a *App) Greet(name string) string {
-	return fmt.Sprintf("Hello %s, It's show time!", name)
-}
-
 func (a *App) SaveMapBackground(base64Data string, fileName string) (string, error) {
 	savePath, err := a.mapService.SaveBackground(base64Data, fileName)
 
@@ -70,4 +64,8 @@ func (a *App) GetAllNodes() ([]dto.Node, error) {
 
 func (a *App) UpdateNode(nodeId int64, label string, x float32, y float32) error {
 	return a.mapService.UpdateNode(nodeId, label, x, y)
+}
+
+func (a *App) DeleteNode(nodeId int64) error {
+	return a.mapService.DeleteNode(nodeId)
 }

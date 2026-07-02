@@ -131,6 +131,10 @@ func (s *MapService) UpdateNode(nodeId int64, label string, x float32, y float32
 	return s.nodeRepo.UpdateNode(nodeId, label, x, y)
 }
 
+func (s *MapService) DeleteNode(nodeId int64) error {
+	return s.nodeRepo.DeleteNode(nodeId)
+}
+
 func parseBase64Image(base64Data string) (mimeType, rawData string, err error) {
 	// data:image/png;base64,<data>
 	if !strings.HasPrefix(base64Data, "data:") {
